@@ -1,0 +1,15 @@
+<resources>
+    <string name="lessons">Уроки</string>
+    <string name="next">Следующий</string>
+    <string name="prev">Предыдущий</string>
+    <string name="login">Вход</string>
+    <string name="homework">Домашнее задание</string>
+    <string name="classwork">Задание в классе</string>
+    <string name="marks">Отметки</string>
+    <string name="copy">Копировать</string>
+    <string name="copied">Скопировано</string>
+    <string name="final_mark">Итог: %s</string>
+
+    <string name="unauthorized">Токен больше не работает, давайте перезайдем в аккаунт</string>
+    <string name="timeout_unauthorized">Ждём долго, давайте перезайдем в аккаунт</string>
+</resources>

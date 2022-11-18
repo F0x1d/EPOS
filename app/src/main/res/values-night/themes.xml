@@ -1,0 +1,16 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.EPOS" parent="Theme.Material3.Dark.NoActionBar">
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="o_mr1">false</item>
+        <!-- Customize your theme here. -->
+        <item name="android:colorBackground">@color/amoled</item>
+        <item name="enableEdgeToEdge">true</item>
+
+        <item name="iconTint">@android:color/white</item>
+        <item name="cardStrokeColor">@color/card_stroke_color_dark</item>
+        <item name="cardBackgroundColor">?android:colorBackground</item>
+    </style>
+</resources>

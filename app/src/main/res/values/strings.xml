@@ -1,0 +1,15 @@
+<resources>
+    <string name="lessons">Lessons</string>
+    <string name="next">Next</string>
+    <string name="prev">Previous</string>
+    <string name="login">Login</string>
+    <string name="homework">Homework</string>
+    <string name="classwork">Classwork</string>
+    <string name="marks">Marks</string>
+    <string name="copy">Copy</string>
+    <string name="copied">Copied</string>
+    <string name="final_mark">Final: %s</string>
+
+    <string name="unauthorized">Token expired, relogin required</string>
+    <string name="timeout_unauthorized">Waiting for too long, let\'s relogin</string>
+</resources>

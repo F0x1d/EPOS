@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="BottomNavTextStyle">
+        <item name="android:fontFamily">@font/opensans_bold</item>
+    </style>
+    <style name="TabTextStyle" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/opensans_medium</item>
+    </style>
+</resources>
