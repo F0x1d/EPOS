@@ -30,6 +30,8 @@
                 android:id="@+id/tab_layout"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                app:tabMode="fixed"
+                app:tabGravity="fill"
                 android:background="?android:colorBackground"
                 app:tabTextAppearance="@style/TabTextStyle"
                 app:layout_constraintTop_toTopOf="parent"

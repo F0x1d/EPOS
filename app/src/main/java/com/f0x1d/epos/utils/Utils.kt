@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.res.Resources
 import android.util.TypedValue
 import androidx.annotation.AttrRes
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.f0x1d.epos.R
 import com.f0x1d.epos.network.model.response.LessonResponse
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
@@ -26,6 +28,11 @@ fun getColorFromAttr(c: Context, @AttrRes attrId: Int): Int {
     val typedValue = TypedValue()
     c.theme.resolveAttribute(attrId, typedValue, true)
     return typedValue.data
+}
+
+fun SwipeRefreshLayout.setupColors() {
+    setColorSchemeColors(getColorFromAttr(context, R.attr.colorPrimary))
+    setProgressBackgroundColorSchemeColor(getColorFromAttr(context, R.attr.colorSurface))
 }
 
 fun weekBounds(offset: Int = 0): Pair<Date, Date> {

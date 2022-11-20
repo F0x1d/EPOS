@@ -2,12 +2,10 @@ package com.f0x1d.epos.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import androidx.preference.PreferenceManager
 
 class AppPreferences(ctx: Context) {
 
     private var appPrefs = ctx.getSharedPreferences("epos_prefs", Context.MODE_PRIVATE)
-    private var settingsPrefs = PreferenceManager.getDefaultSharedPreferences(ctx)
 
     fun registerListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) = appPrefs.registerOnSharedPreferenceChangeListener(listener)
     fun unregisterListener(listener: SharedPreferences.OnSharedPreferenceChangeListener) = appPrefs.unregisterOnSharedPreferenceChangeListener(listener)

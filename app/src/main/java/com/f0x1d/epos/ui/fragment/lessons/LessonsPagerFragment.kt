@@ -7,7 +7,7 @@ import androidx.viewpager2.widget.ViewPager2
 import com.f0x1d.epos.R
 import com.f0x1d.epos.adapter.LessonViewPagerAdapter
 import com.f0x1d.epos.ui.fragment.base.BaseFragment
-import com.f0x1d.epos.utils.getColorFromAttr
+import com.f0x1d.epos.utils.setupColors
 import com.f0x1d.epos.utils.toDayDate
 import com.f0x1d.epos.viewmodel.base.BaseViewModel
 import com.f0x1d.epos.viewmodel.lessons.LessonsPagerViewModel
@@ -40,12 +40,10 @@ class LessonsPagerFragment : BaseFragment<LessonsPagerViewModel>() {
         toolbar.menu.getItem(1).setOnMenuItemClickListener { viewModel.loadNext(); true }
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh)
+        swipeRefreshLayout.setupColors()
         swipeRefreshLayout.setOnRefreshListener { viewModel.reload() }
-        swipeRefreshLayout.setColorSchemeColors(getColorFromAttr(requireActivity(), android.R.attr.colorPrimary))
-        if (isNightTheme) swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getColorFromAttr(requireContext(), R.attr.colorSurface))
 
         tabLayout = findViewById(R.id.tab_layout)
-        tabLayout.tabGravity = TabLayout.GRAVITY_FILL
         for (i in 1..7) {
             tabLayout.addTab(tabLayout.newTab())
         }
@@ -55,7 +53,6 @@ class LessonsPagerFragment : BaseFragment<LessonsPagerViewModel>() {
             }
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {}
-
             override fun onTabReselected(tab: TabLayout.Tab?) {}
         })
 
@@ -63,7 +60,6 @@ class LessonsPagerFragment : BaseFragment<LessonsPagerViewModel>() {
         viewPager.adapter = LessonViewPagerAdapter(this).also { adapter = it }
         viewPager.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
             override fun onPageScrollStateChanged(state: Int) {
-                super.onPageScrollStateChanged(state)
                 swipeRefreshLayout.isEnabled = state == ViewPager2.SCROLL_STATE_IDLE
             }
         })

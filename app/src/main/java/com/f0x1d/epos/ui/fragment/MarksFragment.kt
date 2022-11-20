@@ -10,8 +10,8 @@ import com.f0x1d.epos.adapter.marks.AllMarksAdapter
 import com.f0x1d.epos.ui.dialog.InfoBottomSheet
 import com.f0x1d.epos.ui.fragment.base.BaseFragment
 import com.f0x1d.epos.utils.RecyclerViewDivider
-import com.f0x1d.epos.utils.getColorFromAttr
 import com.f0x1d.epos.utils.mapWeight
+import com.f0x1d.epos.utils.setupColors
 import com.f0x1d.epos.viewmodel.MarksViewModel
 import com.f0x1d.epos.viewmodel.base.BaseViewModel
 import com.google.android.material.appbar.MaterialToolbar
@@ -38,9 +38,8 @@ class MarksFragment: BaseFragment<MarksViewModel>() {
         toolbar.setTitle(R.string.marks)
 
         swipeRefreshLayout = findViewById(R.id.swipe_refresh)
+        swipeRefreshLayout.setupColors()
         swipeRefreshLayout.setOnRefreshListener { viewModel.load() }
-        swipeRefreshLayout.setColorSchemeColors(getColorFromAttr(requireActivity(), android.R.attr.colorPrimary))
-        if (isNightTheme) swipeRefreshLayout.setProgressBackgroundColorSchemeColor(getColorFromAttr(requireContext(), R.attr.colorSurface))
 
         marksRecycler = findViewById(R.id.all_marks_recycler)
         marksRecycler.layoutManager = LinearLayoutManager(requireContext())

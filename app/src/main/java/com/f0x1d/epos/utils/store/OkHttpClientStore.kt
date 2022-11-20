@@ -57,7 +57,8 @@ object OkHttpClientStore {
 
         try {
             val request = Request.Builder()
-                .url("https://school.permkrai.ru/authenticate?token=${EposApplication.appPreferences.askToken()}")
+                .url("https://school.permkrai.ru/authenticate")
+                .header("token", token)
                 .build()
 
             val response = client!!
