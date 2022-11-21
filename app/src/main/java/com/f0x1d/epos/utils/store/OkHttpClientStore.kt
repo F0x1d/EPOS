@@ -51,41 +51,36 @@ object OkHttpClientStore {
         if (token == null || token.isEmpty())
             throw UnauthorizedException()
 
-        try {
-            val request = Request.Builder()
-                .url("https://school.permkrai.ru/authenticate")
-                .header("token", token)
-                .build()
+        val request = Request.Builder()
+            .url("https://school.permkrai.ru/authenticate")
+            .header("token", token)
+            .build()
 
-            val response = client!!
-                .newCall(request)
-                .execute()
-                .body?.run {
-                    val result = string().toObjFromJson(AuthResponse::class.java)
-                    close()
-                    return@run result
-                }
-
-            if (response != null) {
-                EposApplication.appPreferences.saveToken(response.mobileToken)
-
-                cookieJar?.apply {
-                    addCookie("aid", response.cookies.aid)
-                    EposApplication.appPreferences.saveAid(response.cookies.aid)
-
-                    addCookie("auth_token", response.cookies.authToken)
-                    addCookie("from_sudir", response.cookies.fromSudir.toString())
-                    addCookie("is_auth", response.cookies.isAuth.toString())
-                    addCookie("kc_token", "null")
-                    addCookie("long_token", response.cookies.longToken)
-
-                    addCookie("profile_id", response.cookies.profileId)
-                    EposApplication.appPreferences.saveProfileId(response.cookies.profileId)
-                }
+        val response = client!!
+            .newCall(request)
+            .execute()
+            .body?.run {
+                val result = string().toObjFromJson(AuthResponse::class.java)
+                close()
+                return@run result
             }
-        } catch (e: Exception) {
-            e.printStackTrace()
-            throw UnauthorizedException()
+
+        if (response != null) {
+            EposApplication.appPreferences.saveToken(response.mobileToken)
+
+            cookieJar?.apply {
+                addCookie("aid", response.cookies.aid)
+                EposApplication.appPreferences.saveAid(response.cookies.aid)
+
+                addCookie("auth_token", response.cookies.authToken)
+                addCookie("from_sudir", response.cookies.fromSudir.toString())
+                addCookie("is_auth", response.cookies.isAuth.toString())
+                addCookie("kc_token", "null")
+                addCookie("long_token", response.cookies.longToken)
+
+                addCookie("profile_id", response.cookies.profileId)
+                EposApplication.appPreferences.saveProfileId(response.cookies.profileId)
+            }
         }
     }
 }

@@ -9,7 +9,6 @@ import com.f0x1d.epos.utils.toObjFromJson
 import com.google.gson.reflect.TypeToken
 import okhttp3.OkHttpClient
 import okhttp3.Request
-import java.net.SocketTimeoutException
 import java.util.*
 
 fun profileUrl(profileId: String?, aid: String?) = "https://school.permkrai.ru/core/api/student_profiles/$profileId?" +
@@ -57,22 +56,26 @@ fun allMarksUrl(profileId: String?, aid: String?) = "https://school.permkrai.ru/
 
 
 @Throws(Exception::class)
-suspend fun <T> OkHttpClient.makeSignedRequest(url: String, type: TypeToken<T>): T? {
+suspend fun <T> OkHttpClient.makeSignedRequest(url: String, type: TypeToken<T>, secondAttempt: Boolean = false): T? {
     val request = Request.Builder()
         .url(url)
         .build()
 
     val response = try {
-        newCall(request)
-            .execute()
+        newCall(request).execute()
     } catch (e: Exception) {
-        if (e is SocketTimeoutException) {
-            throw UnauthorizedException(R.string.timeout_unauthorized)
+        if (!secondAttempt) {
+            return retryRequest(url, type)
         }
+
         throw e
     }
 
     if (response.code == 401 || response.code == 400) {
+        if (!secondAttempt) {
+            return retryRequest(url, type)
+        }
+
         throw UnauthorizedException()
     } else if (response.code != 200) {
         throw Exception(response.code.toString() + "\n" + response.body?.string().toString())
@@ -84,5 +87,9 @@ suspend fun <T> OkHttpClient.makeSignedRequest(url: String, type: TypeToken<T>):
         return@run result
     }
 }
+
+private suspend fun <T> retryRequest(url: String, type: TypeToken<T>) = OkHttpClientStore
+    .requireClient(true)
+    .makeSignedRequest(url, type, true)
 
 class UnauthorizedException(msg: Int = R.string.unauthorized): Exception(EposApplication.instance.getString(msg))
