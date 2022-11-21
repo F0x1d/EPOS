@@ -6,6 +6,8 @@ import com.f0x1d.epos.network.model.response.AuthResponse
 import com.f0x1d.epos.network.okhttp.EposCookieJar
 import com.f0x1d.epos.utils.toObjFromJson
 import kotlinx.coroutines.*
+import kotlinx.coroutines.sync.Mutex
+import kotlinx.coroutines.sync.withLock
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.util.concurrent.TimeUnit
@@ -15,38 +17,32 @@ object OkHttpClientStore {
     private var client: OkHttpClient? = null
     private var cookieJar: EposCookieJar? = null
 
-    private var authJob: Job? = null
+    private val mutex = Mutex()
 
     @Throws(Exception::class)
-    suspend fun requireClient(recreate: Boolean = false): OkHttpClient = withContext(Dispatchers.Default) {
-        if (recreate) {
-            client = null
-            cookieJar = null
-        }
+    suspend fun requireClient(recreate: Boolean = false) = withContext(Dispatchers.Default) {
+        return@withContext mutex.withLock {
+            if (recreate) {
+                client = null
+                cookieJar = null
+            }
 
-        if (client == null) {
-            cookieJar = EposCookieJar()
+            if (client == null) {
+                cookieJar = EposCookieJar()
 
-            client = OkHttpClient.Builder()
-                .connectTimeout(10, TimeUnit.SECONDS)
-                .readTimeout(10, TimeUnit.SECONDS)
-                .cookieJar(cookieJar!!)
-                .build()
+                client = OkHttpClient.Builder()
+                    .connectTimeout(10, TimeUnit.SECONDS)
+                    .readTimeout(10, TimeUnit.SECONDS)
+                    .cookieJar(cookieJar!!)
+                    .build()
 
-            if (authJob == null || authJob!!.isCompleted) {
-                authJob = launch(Dispatchers.IO) {
+                withContext(Dispatchers.IO) {
                     processAuth()
                 }
             }
-        }
 
-        if (authJob != null && !authJob!!.isCompleted) {
-            withContext(Dispatchers.IO) {
-                authJob!!.join()
-            }
+            return@withLock client!!
         }
-
-        return@withContext client!!
     }
 
     @Throws(Exception::class)
@@ -71,6 +67,8 @@ object OkHttpClientStore {
                 }
 
             if (response != null) {
+                EposApplication.appPreferences.saveToken(response.mobileToken)
+
                 cookieJar?.apply {
                     addCookie("aid", response.cookies.aid)
                     EposApplication.appPreferences.saveAid(response.cookies.aid)
