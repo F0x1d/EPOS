@@ -1,4 +1,3 @@
 # EPOS
-Android app for Perm schools digital journal. Official app is unreal to use, so i made my own
 
-This is my really old app
+My old and very simple Android app for [Perm schools digital journal](https://school.permkrai.ru/). Official app is unreal to use, so i made my own
